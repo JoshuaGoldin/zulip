@@ -1038,6 +1038,11 @@ class EventsRegisterTest(ZulipTestCase):
         ])
         if setting_name == "timezone":
             error = timezone_schema_checker('events[1]', events[1])
+        else:
+            events = self.do_test(
+                lambda: do_set_user_display_setting(self.user_profile, setting_name, change))
+            error = schema_checker('events[0]', events[0])
+            self.assert_on_error(error)
             """error = schema_checker('events[0]', events[0])
             self.assert_on_error(error)
             timezone_schema_checker = self.check_events_dict([
