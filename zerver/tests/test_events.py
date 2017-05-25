@@ -980,16 +980,16 @@ class EventsRegisterTest(ZulipTestCase):
             timezone = [u'US/Mountain', u'US/Samoa', u'Pacific/Galapogos', u'']
         )  # type: Dict[str, Any]
 
+        """elif property_type is int:
+            validator = check_int
+        elif property_type == (int, type(None)):
+            validator = check_int"""
 
         property_type = UserProfile.property_types[setting_name]
         if property_type is bool:
             validator = check_bool
         elif property_type is Text:
             validator = check_string
-        """elif property_type is int:
-            validator = check_int
-        elif property_type == (int, type(None)):
-            validator = check_int"""
         else:
             raise AssertionError("Unexpected property type %s" % (property_type,))
         num_events = 1
@@ -999,7 +999,7 @@ class EventsRegisterTest(ZulipTestCase):
             do_set_user_display_setting(self.user_profile, setting_name, False)
         for value in values_list:
             events = self.do_test(lambda: do_set_user_display_setting(
-                self.user_profile, setting_name, value_, num_events=num_events)
+                self.user_profile, setting_name, value), num_events=num_events)
             schema_checker = self.check_events_dict(
                 ('type', equals('update_display_settings')),
                 ('setting_name', equals(setting_name)),
