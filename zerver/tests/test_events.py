@@ -992,21 +992,35 @@ class EventsRegisterTest(ZulipTestCase):
             validator = check_string
         else:
             raise AssertionError("Unexpected property type %s" % (property_type,))
+        schema_checker = self.check_events_dict([
+            ('type', equals('update_display_settings')),
+            ('setting_name', equals(setting_name)),
+            ('user', check_string),
+            ('setting', validator),
+        ])
         num_events = 1
         if setting_name == "timezone":
             num_events = 2
         if property_type == bool:
             do_set_user_display_setting(self.user_profile, setting_name, False)
-        for value in values_list:
+        """for change in changes:
             events = self.do_test(lambda: do_set_user_display_setting(
-                self.user_profile, setting_name, value), num_events=num_events)
-            schema_checker = self.check_events_dict(
+                self.user_profile, setting_name, value), num_events=num_events)"""
+            """schema_checker = self.check_events_dict(
                 ('type', equals('update_display_settings')),
                 ('setting_name', equals(setting_name)),
                 ('user', check_string),
                 ('setting', validator),
-            )
-
+            )"""
+        changes = test_values.get(setting_name)
+        if changes is None:
+            raise AssertionError('No test created for %s' % (name))
+        do_set_user_display_setting(self.user_profile, setting_name, changes[0])
+        for change in changes[1:]:
+            events = self.do_test(
+                lambda: do_set_user_display_setting(self.user_profile.realm, name, val))
+            error = schema_checker('events[0]', events[0])
+            self.assert_on_error(error)
         timezone_schema_checker = self.check_events_dict([
             ('type'.equals('realm_user')),
             ('op'.equals('update')),
