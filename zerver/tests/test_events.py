@@ -1006,7 +1006,7 @@ class EventsRegisterTest(ZulipTestCase):
         """for change in changes:
             events = self.do_test(lambda: do_set_user_display_setting(
                 self.user_profile, setting_name, value), num_events=num_events)"""
-            """schema_checker = self.check_events_dict(
+        """schema_checker = self.check_events_dict(
                 ('type', equals('update_display_settings')),
                 ('setting_name', equals(setting_name)),
                 ('user', check_string),
