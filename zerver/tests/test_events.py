@@ -1000,12 +1000,12 @@ class EventsRegisterTest(ZulipTestCase):
         ])
         num_events = 1
         if setting_name == "timezone":
-            events = self.do_test(lambda: do_set_user_display_setting(self.user_profile, setting_name, change)
-        """else:
+            events = self.do_test(lambda: do_set_user_display_setting(self.user_profile, setting_name, change))
+        else:
             events = self.do_test(
                 lambda: do_set_user_display_setting(self.user_profile, setting_name, change))
             error = schema_checker('events[0]', events[0])
-            self.assert_on_error(error)"""
+            self.assert_on_error(error)
         """if property_type == bool:
             do_set_user_display_setting(self.user_profile, setting_name, False)"""
         """for change in changes:
