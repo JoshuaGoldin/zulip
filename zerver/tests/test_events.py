@@ -968,7 +968,7 @@ class EventsRegisterTest(ZulipTestCase):
             error = schema_checker('events[0]', events[0])
             self.assert_on_error(error)
 
-    def do_set_user_display_settings_test(self, setting_name):
+    def do_set_user_display_settings_test(self, setting_name, values_list):
         # type: (str)-> None
         bool_change = [True, False]  # type: List[bool]
         test_changes = dict(
