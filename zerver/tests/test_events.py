@@ -1005,7 +1005,7 @@ class EventsRegisterTest(ZulipTestCase):
                 ('setting_name', equals(setting_name)),
                 ('user', check_string),
                 ('setting', validator),
-            ])
+            )
             error = schema_checker('events[0]', events[0])
             self.assert_on_error(error)
             timezone_schema_checker = self.check_events_dict([
