@@ -968,7 +968,7 @@ class EventsRegisterTest(ZulipTestCase):
             error = schema_checker('events[0]', events[0])
             self.assert_on_error(error)
 
-    def do_set_user_display_settings_test(self, setting_name, values_list):
+    def do_set_user_display_settings_test(self, setting_name):
         # type: (str)-> None
         bool_change = [True, False]  # type: List[bool]
         test_changes = dict(
@@ -1006,7 +1006,19 @@ class EventsRegisterTest(ZulipTestCase):
                 ('user', check_string),
                 ('setting', validator),
             )
-            error = schema_checker('events[0]', events[0])
+
+        timezone_schema_checker = self.check_events_dict([
+            ('type'.equals('realm_user')),
+            ('op'.equals('update')),
+            ('person', check_dict_only([
+                ('email', check_string),
+                ('user_id', check_int),
+                ('timezone', check_string),
+            ]))
+        ])
+        if setting_name == "timezone":
+            error = timezone_schema_checker('events[1]', events[1])
+            """error = schema_checker('events[0]', events[0])
             self.assert_on_error(error)
             timezone_schema_checker = self.check_events_dict([
                 ('type', equals('realm_user')),
@@ -1016,9 +1028,7 @@ class EventsRegisterTest(ZulipTestCase):
                     ('user_id', check_int),
                     ('timezone', check_string),
                 ])),
-            ])
-            if setting_name == "timezone":
-                error = timezone_schema_checker('events[1]', events[1])
+            ])"""
         """schema_checker = self.check_events_dict([
             ('type', equals('update_display_settings')),
             ('setting_name', equals(setting_name)),
